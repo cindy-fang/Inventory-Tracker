@@ -44,4 +44,4 @@ Users can update specific inventory items
 
 Users can delete specific inventory items
 
-Users can export the inventory item into a .csv file
+Users can filter and view specific inventory items
