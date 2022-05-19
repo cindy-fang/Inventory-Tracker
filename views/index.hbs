@@ -1,0 +1,78 @@
+<h1>Welcome to your Inventory Tracker</h1>
+<p >
+    The current Date and Time is <span id='date-time'></span></p>
+<script>
+    var dt = new Date();
+    document.getElementById('date-time').innerHTML = dt;
+
+</script>
+<br>
+
+<form method="post">
+    <p>
+        To add a new inventory item, please enter the item name, location (toronto/seoul/chicago/rome/athens), stock count, weather, and date below. 
+    </p>
+    <p>
+        <input id="title" name="title" type="text" value="" placeholder="Enter item name" />
+        <input id="loc" name="loc" type="text" value="" placeholder="Enter item location" />
+        <input id="count" name="count" type="number" value="" placeholder="Enter stock count" />
+        <input id="weather" name="weather" type="text" value="" placeholder="Weather description" />
+        <input id="date" name="date" type="date" value="" placeholder="Enter date" />
+
+        <button name="save" value="Save" type="submit">Create Item</button>
+    </p>
+</form>
+
+<form method="post">
+    <p>
+        To filter inventory items based on location (toronto/seoul/chicago/rome/athens), stock count, weather, and date. 
+    </p>
+    <p>
+        <input id="loc" name="loc" type="text" value="" placeholder="Enter item location" />
+        <button name="fLoc" value="fLoc" type="submit">Filter Location</button>
+
+        <input id="count" name="count" type="number" value="" placeholder="Enter stock count" />
+        <button name="fCount" value="fCount" type="submit">Filter Count</button>
+
+        <input id="weather" name="weather" type="text" value="" placeholder="Weather description" />
+        <button name="fWeather" value="fWeather" type="submit">Filter Weather</button>
+
+        <input id="date" name="date" type="date" value="" placeholder="Enter date" />
+        <button name="fDate" value="fDate" type="submit">Filter Date Item</button>
+
+        
+    </p>
+</form>
+
+
+<form method="post">
+    <ul >
+        {{#each notif}}
+            <li>{{this.title}} 
+            <li>{{this.loc}} </li> 
+            <li>{{this.count}} </li> 
+            <li>{{this.weather}} 
+            <li>{{this.date}} <br><button name="del" value="{{this.title}}" type="submit">Remove Item</button></li>
+            <br>
+        {{/each}}
+    </ul>
+</form>
+
+<form method="post">
+    <p>
+        To edit an existing inventory item, please fill in all of the following below, including both new changes and information you don't want to change. 
+    </p>
+    <p>
+        <input id="title" name="title" type="text" value="" placeholder="Enter item name" />
+        <input id="loc" name="loc" type="text" value="" placeholder="Enter item location" />
+        <input id="count" name="count" type="number" value="" placeholder="Enter stock count" />
+        <input id="weather" name="weather" type="text" value="" placeholder="Weather description" />
+        <input id="date" name="date" type="date" value="" placeholder="Enter date" />
+
+        <button name="update" value="update" type="submit">Update Item</button>
+    </p>
+</form>
+
+<form method="post" action="logout">
+    <input type="submit" value="Log Out">
+</form>

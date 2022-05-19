@@ -1,0 +1,38 @@
+*,:active{
+  outline: none;
+}
+*{
+  padding: 3px;
+}
+
+body{
+  margin: 20px;
+  padding-left: 50px;
+  padding-top: 20px;
+  background-color: #8eb599;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-size: 96.5%;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+input{
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+ul{
+  font-family: Helvetica, Arial, sans-serif;
+  color: black;
+
+}
+
+h1, h2, h3, h4, h5, p{
+  margin-bottom: 10px;
+}
+
+p{
+  line-height: 20px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+
