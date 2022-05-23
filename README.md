@@ -25,6 +25,7 @@ For Replit:
 6. Enter npm start 
 7. Open localhost:3000 on the virtual browser 
 8. Log in with credentials: username = user, password = 12345
+9. Please open in new tab to fully access the web app
 
 
 Usage:
