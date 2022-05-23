@@ -1,22 +1,19 @@
 <h1>Welcome to your Inventory Tracker</h1>
 <p >
-    The current Date and Time is <span id='date-time'></span></p>
+    The current date and time is <span id='date-time'></span></p>
 <script>
     var dt = new Date();
     document.getElementById('date-time').innerHTML = dt;
-
 </script>
-<br>
 
 <form method="post">
     <p>
-        To add a new inventory item, please enter the item name, location (toronto/seoul/chicago/rome/athens), stock count, weather, and date below. 
+        To add a new inventory item: enter the item name, location (athens/chicago/rome/seoul/toronto), stock count, weather, and date. 
     </p>
     <p>
         <input id="title" name="title" type="text" value="" placeholder="Enter item name" />
         <input id="loc" name="loc" type="text" value="" placeholder="Enter item location" />
         <input id="count" name="count" type="number" value="" placeholder="Enter stock count" />
-        <input id="weather" name="weather" type="text" value="" placeholder="Weather description" />
         <input id="date" name="date" type="date" value="" placeholder="Enter date" />
 
         <button name="save" value="Save" type="submit">Create Item</button>
@@ -25,52 +22,33 @@
 
 <form method="post">
     <p>
-        To filter inventory items based on location (toronto/seoul/chicago/rome/athens), stock count, weather, and date. 
-    </p>
-    <p>
-        <input id="loc" name="loc" type="text" value="" placeholder="Enter item location" />
-        <button name="fLoc" value="fLoc" type="submit">Filter Location</button>
-
-        <input id="count" name="count" type="number" value="" placeholder="Enter stock count" />
-        <button name="fCount" value="fCount" type="submit">Filter Count</button>
-
-        <input id="weather" name="weather" type="text" value="" placeholder="Weather description" />
-        <button name="fWeather" value="fWeather" type="submit">Filter Weather</button>
-
-        <input id="date" name="date" type="date" value="" placeholder="Enter date" />
-        <button name="fDate" value="fDate" type="submit">Filter Date Item</button>
-
-        
-    </p>
-</form>
-
-
-<form method="post">
-    <ul >
-        {{#each notif}}
-            <li>{{this.title}} 
-            <li>{{this.loc}} </li> 
-            <li>{{this.count}} </li> 
-            <li>{{this.weather}} 
-            <li>{{this.date}} <br><button name="del" value="{{this.title}}" type="submit">Remove Item</button></li>
-            <br>
-        {{/each}}
-    </ul>
-</form>
-
-<form method="post">
-    <p>
-        To edit an existing inventory item, please fill in all of the following below, including both new changes and information you don't want to change. 
+        To edit an inventory item: enter in all of the following, including both new changes and existing information. 
     </p>
     <p>
         <input id="title" name="title" type="text" value="" placeholder="Enter item name" />
         <input id="loc" name="loc" type="text" value="" placeholder="Enter item location" />
         <input id="count" name="count" type="number" value="" placeholder="Enter stock count" />
-        <input id="weather" name="weather" type="text" value="" placeholder="Weather description" />
         <input id="date" name="date" type="date" value="" placeholder="Enter date" />
 
-        <button name="update" value="update" type="submit">Update Item</button>
+        <button name="update" value="update" type="submit">Save Changes</button>
     </p>
+</form>
+
+<br><br>
+<form method="post">
+    <p1>Inventory List:</p1> 
+    <ul >
+        {{#each notif}}
+            <li>Name: {{this.title}} 
+            <li>Location: {{this.loc}} </li> 
+            <li>Stock: {{this.count}} </li> 
+            <li>Weather: {{this.weather}}<span>&#176;</span>C 
+            <li>Date: {{this.date}} <br><button name="del" value="{{this.title}}" type="submit">Remove Item</button></li>
+            <br>
+        {{/each}}
+    </ul>
+        <button name="refresh" value="refresh" type="submit">Update Inventory List</button> &nbsp;
+        <button name="csv" value ="csv" type="submit">Export to CSV</button> <br><br> <br> 
 </form>
 
 <form method="post" action="logout">
