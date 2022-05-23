@@ -12,6 +12,7 @@ After Node.js has been installed, follow these steps:
 4. Run npm i request express hbs json2csv fs router require path mongodb to be safe about installing all dependencies :)
 5. Run npm start on the current directory
 6. Open localhost:3000 on your browser (any is fine) 
+7. log in with credentials: username = user, password = 12345
 
 
 For Replit:
@@ -23,6 +24,7 @@ For Replit:
 5. Run npm i request express hbs json2csv fs router require path mongodb
 6. Enter npm start 
 7. Open localhost:3000 on the virtual browser 
+8. log in with credentials: username = user, password = 12345
 
 
 Usage:
