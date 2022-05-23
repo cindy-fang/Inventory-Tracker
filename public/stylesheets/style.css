@@ -13,26 +13,34 @@ body{
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   font-size: 96.5%;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: monospace;
 }
 
 input{
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: monospace;
 }
 
 ul{
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: monospace;
   color: black;
-
 }
 
 h1, h2, h3, h4, h5, p{
   margin-bottom: 10px;
+  font-family: monospace;
 }
 
 p{
   line-height: 20px;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family: monospace;
+}
+p1{
+  font-size: 180%;
+  text-decoration: underline;
+  font-family: monospace;
 }
 
-
+button{
+  font-family: monospace;
+  font-size: 100%;
+}
