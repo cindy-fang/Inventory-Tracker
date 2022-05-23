@@ -2,46 +2,39 @@
 
 This is my submission for the 2022 Production Engineer internship coding challenge.
 
-The technology used and will be required to be installed to build the code:
-
-Node.js and Express.js 
+Please install Node.js prior to running the program. 
 
 After Node.js has been installed, follow these steps:
 
-1. On your terminal, run git clone https://github.com/cindy-fang/2022-shopify-intern-challenge.git
+1. On your terminal, run git clone https://github.com/cindy-fang/Shopify-Internship-Fall-2022-Production-Engineer-Challenge.git
+2. Run npm install to install all dependencies
+3. Run install nodemon 
+4. Run npm i request express hbs json2csv fs router require path mongodb to be safe about installing all dependencies :)
+5. Run npm start on the current directory
+6. Open localhost:3000 on your browser (any is fine) 
 
-2. We would need to inject the open weather API key onto the project for it to fully run. navigate to cd shopifyapp/server and create a file .env where the contents are:
-OPEN_WEATHER_API_KEY= ***************
-
-3. on the same directory shopifyapp/server run npm install to install all dependencies
-
-4. Run npm start on the current directory
-
-5. Open: localhost:5000 on any browser 
 
 For Replit:
 
 1. Go to the replit link!
+2. On the bottom right of replit, go to the shell tab to start 
+3. Install the dependencies by entering npm install
+4. Run install nodemon
+5. Run npm i request express hbs json2csv fs router require path mongodb
+6. Enter npm start 
+7. Open localhost:3000 on the virtual browser 
 
-2. I have already inserted the API KEY on the replit however, if this is not the case, then on the side tab of replit, navigate to the secrets tab and add the key:
-Key: OPEN_WEATHER_API_KEY Value:***************
-
-3. On the bottom right of replit, go to the shell tab and navigate to the server file by entering cd server
-
-4. Install the dependencies by entering npm install
-
-5. Enter npm start
-
-6. Open localhost:5000 on the virutal browser 
 
 Usage:
 
-This is a web application that features an in-memory database that allows users to view inventory items.
+This is a web application connected to a mongoDB database that allows users to query inventory items.
 
 Users can create inventory items
+
+Users can view inventory items 
 
 Users can update specific inventory items
 
 Users can delete specific inventory items
 
-Users can filter and view specific inventory items
+Users can download inventory items to a csv file 
