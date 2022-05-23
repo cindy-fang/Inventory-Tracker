@@ -92,7 +92,6 @@ async function updateItem(username,title, loc, count, weather, date){
 
     //check if item already exists (by item name/title)
     var checkExist = await conn.collection('Users').find({username: 'user',"inventory.title":title}).count()>0;
-    //console.log(yeehaw)
     if (checkExist){
         await conn.collection('Users').updateOne({username},{ $pull: {inventory:{title},},},)
 
