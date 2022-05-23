@@ -11,12 +11,6 @@ var MongoStore = require('connect-mongo')(session);
 var indexRouter = require('./routes/index');
 
 var app = express();
-
-// Setup your express app and body-parser configurations
-// Setup your javascript template view engine
-// we will serve your static pages from the public directory, it will act as your root directory
-//app.use(bodyParser.urlencoded({ extended: true }));
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -50,5 +44,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
