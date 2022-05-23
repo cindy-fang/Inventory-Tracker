@@ -1,134 +1,125 @@
-var express = require('express');
-var router = express.Router();
-var db = require("../db");
+var { MongoClient, ConnectionClosedEvent} = require('mongodb');
+// want to import mongoclient field from mongo db namespace
+var bcrypt = require('bcrypt');
 
-//weather api 
-var request = require('request');
-var { response } = require('express');
-var API_KEY = '8d87c1685e476709e2704076378ed102';
+var url = 'mongodb+srv://dbUser:FuNawdaOMwFyFCNH@cluster0.gezqw.mongodb.net/cps731?retryWrites=true&w=majority'
 
-//log in or register 
-router.post("/login",async function(req,res){
-var {username,password,register} = req.body;
-
-if (register){
-  await db.register(username, password);
-}else {
-  await db.login(username,password);
-}
-req.session.username = username;
-res.redirect('/');
-});
-
-function ensureLoggedIn(req,res,next){
-  if(!req.session.username){
-    res.redirect('/login');
-  } else{
-    next();
-  }
+var db = null; 
+var client = null;
+async function connect(){
+    if (db == null){
+    var options = {
+        useUnifiedTopology: true,
+    }
+    client = await MongoClient.connect(url,options);
+    db = await client.db("cps731");
+    }
+    return db;
 }
 
-function refresh(req,res,next){
-  if(req.session.username){
-    res.redirect('/');
-  } else{
-    next();
-  }
+async function register(username,password){
+    var conn = await connect();
+
+    var existingUser = await conn.collection('Users').findOne({username});
+    if (existingUser != null){
+        throw new Error('User already exits!');
+    }
+    var SALT_ROUNDS = 10;
+    var passwordHash = await bcrypt.hash(password,SALT_ROUNDS);
+
+    conn.collection('Users').insertOne({username,passwordHash});
 }
 
-// --------------------Routes---------------------
+async function login(username,password){
+    var conn = await connect();
+    var user = await conn.collection('Users').findOne({username});
 
-// registration
-router.get('/registration', (req,res) =>{
-  res.render('registration');
-});
+    if (user == null){
+        throw new Error('User does not exist');
+    }
+    var valid = await bcrypt.compare(password,user.passwordHash);
+    //pass in supplied and existing password hash
+    //user.passwordHash retrieves the passwordHash from Register function
+    //valid is boolean indicating if it matches
 
-//login 
-router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'Inventory Tracker' });
-});
+    if (!valid){
+        throw new Error('Invalid Password');  
+    }
+}
 
-//-----------------------------------------------------------------------------------------
-router.use(ensureLoggedIn); // have to be logged in to use code below
+//CREATE 
+async function addItem(username,title, loc, count, weather, date){
+    var conn = await connect();
 
-/* GET home page */
-router.get('/', async (req,res) =>{
-  var {username} = req.session;
-  var notif = await db.showItems(username);
-  res.render('index', { title: 'Inventory List',notif });
-});
+    //check if item already exists (by item name/title)
+    var yeehaw = await conn.collection('Users').find({username: 'user',"inventory.title":title}).count()>0;
+    //console.log(yeehaw)
+    if (yeehaw){
+        throw new Error("Item already exists");
+    }
+    //add item into db 
+    await conn.collection('Users').updateOne(
+        {username},
+        { $push: {inventory:{title,loc, count, weather, date},},},
+    )
+}
 
-/* CRUD operations and CSV*/
-router.post('/',async function(req,res){
-  var {title,date,loc,count, save,del,update,csv} = req.body;
-  var {username} = req.session;
-  console.log(req.body);
-  
-  //api call url
-  var url = `http://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${API_KEY}&units=metric`
-  
-  //download to csv file 
-  if(csv){
-    await db.csv(username);
-  }
-  //refresh the page 
-  if(refresh){
-    router.use(refresh);
-  }
-    
-  //weather api call function to get current weather with error handling 
-  function doRequest(u) {
-    return new Promise(function (resolve, reject) {
-      request({url:u, json:true}, function (error, res, body) {
-        if (!error && res.statusCode == 200) {
-          resolve(body.main.temp);
-        } else {
-          reject(error);
-        }
-      });
+//READ 
+async function showItems(username){
+    var conn = await connect();
+    var user = await conn.collection('Users').findOne({username});
+    console.log(user);
+    return user.inventory;
+}
+
+//CSV download 
+async function csv(username){
+    var conn = await connect();
+    var data = await conn.collection('Users').findOne({username});
+    const Json2csvParser = require("json2csv").Parser;
+    const fs = require("fs");
+    const json2csvParser = new Json2csvParser({ header: true });
+    const csvData = json2csvParser.parse(data);
+    fs.writeFile("inventory.csv", csvData, function(error) {
+        if (error) throw error;
+        console.log("Write to inventory.csv successfully!");
     });
-  }
-  //save
-  if(save){
-    //error handling for unfilled form 
-    if (title ==''|| date == ''|| loc == '' || count == ''){
-      throw new Error("Please fill in all item information")
-    }
-    else if (loc == 'seoul' || loc == 'toronto' || loc == 'chicago' || loc == 'rome' || loc == 'athens'){
-      let w = await doRequest(url);
-      await db.addItem(username,title, loc, count, w, date);
-    }
-    //error handling for incorrectly filled location
-    else{
-      throw new Error ("Please enter one of the listed locations: athens/chicago/rome/seoul/toronto")
-    }
-  }  
-  //delete
-  if(del){
-    await db.deleteItem(username,del);
-  } 
-  //update
-  if(update){
-    //error handling for unfilled form 
-    if (title ==''|| date == ''|| loc == '' || count == ''){
-      throw new Error("Please fill in all item information")
-    }
-    else if (loc == 'seoul' || loc == 'toronto' || loc == 'chicago' || loc == 'rome' || loc == 'athens'){
-      let w = await doRequest(url);
-      await db.updateItem(username,title, loc, count,w, date);
-    }
-    //error handling for incorrect location 
-    else{
-      throw new Error ("Please enter one of the listed locations: athens/chicago/rome/seoul/toronto")
-    }
-  }
-  res.redirect('/');
-});
+}
 
-//user logout 
-router.post('/logout',async function(req,res){
-  req.session.username= '';
-  res.redirect('/');
-});
+//UPDATE 
+async function updateItem(username,title, loc, count, weather, date){
+    var conn = await connect();
 
-module.exports = router;
+    //check if item already exists (by item name/title)
+    var checkExist = await conn.collection('Users').find({username: 'user',"inventory.title":title}).count()>0;
+    //console.log(yeehaw)
+    if (checkExist){
+        await conn.collection('Users').updateOne({username},{ $pull: {inventory:{title},},},)
+
+        await conn.collection('Users').updateOne(
+            {username},
+            { $push: {inventory:{title,loc, count, weather, date},},},
+            )
+    }
+    else{
+        throw new Error("Item does not exist");
+    }
+}
+
+//DELETE 
+async function deleteItem(username,title){
+    var conn = await connect();
+    await conn.collection('Users').updateOne({username},{ $pull: {inventory:{title},},},) 
+}
+
+module.exports = {
+    login,
+    register,
+    url,
+    updateItem,
+    addItem,
+    showItems,
+    deleteItem,
+    csv
+}
+// makes function accesible from outside the file
