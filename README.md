@@ -17,7 +17,7 @@ After Node.js has been installed, follow these steps:
 
 For Replit:
 
-1. Go to the replit link!
+1. Go to the replit link
 2. On the bottom right of replit, go to the shell tab to start 
 3. Install the dependencies by entering npm install
 4. Run install nodemon
